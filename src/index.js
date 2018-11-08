@@ -1,17 +1,19 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-// const mongoose = require('mongoose');
-// const keys = require('./config/keys');
 const backEndRoute = require('./routes/general_routes.js');
 require('./db/mysql');
 
 const app = express();
 
-// mongoose.Promise = global.Promise;
-// mongoose.connect(keys.mongoDbUri, { useNewUrlParser: true });
-
 app.use(bodyParser.json());
+
+// Fix CORS error
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 backEndRoute(app);
 
