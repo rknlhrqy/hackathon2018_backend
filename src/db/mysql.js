@@ -11,7 +11,7 @@ class mysqlDB {
       database: mysqlConfig.DATABASE,
     });
   }
-
+/*
   createTable() {
     const sql = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, pointname VARCHAR(255), latitude DECIMAL(8,6), longitude DECIMAL(8,6))";
     return new Promise((resolve, rejecrt) => {
@@ -21,13 +21,20 @@ class mysqlDB {
       });
     });
   }
+  */
 
   insertToTable(data) {
-    const sql = `INSERT INTO users (pointname, latitude, longitude) VALUES ('${data.pointName}', ${data.latitude}, ${data.longitude})`;
+    const sql = `
+      INSERT INTO users (pointname, latitude, longitude)
+        VALUES ('${data.pointName}', ${data.latitude}, ${data.longitude})
+        ON DUPLICATE KEY UPDATE
+          latitude = ${data.latitude},
+          longitude = ${data.longitude}
+    `;
+    console.log(sql);
     return new Promise((resolve, reject) => {
       this.con.query(sql, (error, result, fields) => {
         if (error) reject(error);
-        // console.log("Add into Table");
         resolve(result);
       });
     });
@@ -38,7 +45,6 @@ class mysqlDB {
     return new Promise((resolve, reject) => {
       this.con.query(sql, (error, result, fields) =>{
         if (error) reject(error);
-        // console.log("Read from Table");
         resolve(result);
       });
     });

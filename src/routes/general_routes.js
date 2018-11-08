@@ -14,24 +14,30 @@ const sanityCheck = (data) => {
 
 module.exports = (app) => {
   app.get('/users', async (request, response) => {
-    // console.log('HTTP GET /users Received!');
-    const data = await mysqlDB.readTable('users');
-    // console.log(JSON.stringify(data));
-    response.send({data});
+    try {
+      const data = await mysqlDB.readTable('users');
+      response.send({data});
+    } catch(error) {
+      response.status(400).send({error: 'Error!'});
+    }
   });
 
   app.get('/accelerations', async (request, response) => {
-    // console.log('HTTP GET /users Received!');
-    const data = await mysqlDB.readTable('acceleration (oct)');
-    // console.log(JSON.stringify(data));
-    response.send({data});
+    try {
+      const data = await mysqlDB.readTable('acceleration (oct)');
+      response.send({data});
+    } catch(error) {
+      response.status(400).send({error: 'Error!'});
+    }
   });
 
   app.get('/acls', async (request, response) => {
-    // console.log('HTTP GET /users Received!');
-    const data = await mysqlDB.readTable('acl (oct)');
-    // console.log(JSON.stringify(data));
-    response.send({data});
+    try {
+      const data = await mysqlDB.readTable('acl (oct)');
+      response.send({data});
+    } catch(error) {
+      response.status(400).send({error: 'Error!'});
+    }
   });
 
   app.post('/user', async (request, response) => {
@@ -39,10 +45,12 @@ module.exports = (app) => {
     if (!sanityCheck(locData)) {
       response.status(400).send({error: 'Data not valid!'});
     } else {
-      // console.log('HTTP POST /user Data Received:');
-      // console.log(locData);
-      await mysqlDB.insertToTable(locData);
-      response.send({locData});
+      try {
+        const data = await mysqlDB.insertToTable(locData);
+        response.send({data});
+      } catch (error) {
+        response.status(400).send({error: 'error!'});
+      }
     }
   });
 };
