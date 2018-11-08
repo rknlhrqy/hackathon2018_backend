@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 // const mongoose = require('mongoose');
 // const keys = require('./config/keys');
 const backEndRoute = require('./routes/general_routes.js');
+require('./db/mysql');
 
 const app = express();
 

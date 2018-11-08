@@ -1,82 +1,34 @@
 const _ = require('lodash');
-// const { ObjectID } = require('mongodb');
-// const { Merman } = require('../db/merman');
+const mysqlDB = require('../db/mysql');
+
+const sanityCheck = (data) => {
+  if (_.isEmpty(data)) {
+    console.log('HTTP POST /user Empty Data Received:');
+    return false;
+  } else if (!data.pointName || !data.latitude || !data.longitude) {
+    console.log('HTTP POST /user Empty 2 Data Received:');
+    return false;
+  }
+  return true;
+};
 
 module.exports = (app) => {
-
   app.get('/users', async (request, response) => {
     console.log('HTTP GET /users Received!');
-    response.send({ack: 'HTTP GET /users Received!'});
-    /*
-    try {
-      const mermen = await Merman.find();
-      response.send({mermen});
-    } catch (error) {
-      response.status(400).send(error);
-    }
-    */
+    const data = await mysqlDB.readTable();
+    console.log(JSON.stringify(data));
+    response.send({data});
   });
 
   app.post('/user', async (request, response) => {
-    console.log('HTTP POST /user Received!');
-    response.send({ack: 'HTTP POST /user Received!'});
-    /*
-    const merman = new Merman({
-      name: request.body.name,
-      location: request.body.location,
-    });
-    try {
-      const doc = await merman.save();
-      response.send(doc);
-    } catch (error) {
-      response.status(400).send(error);
-    };
-    */
-  });
-/*
-  app.patch('/srv/change/:my_id', async (request, response) => {
-    const id = request.params.my_id;
-    let body = _.pick(request.body, ['location']);
-
-    if (!ObjectID.isValid(id)) {
-      response.status(404).send({error: `ID ${id} is not valid!`});
+    let locData = _.pick(request.body, ['pointName', 'latitude', 'longitude']);
+    if (!sanityCheck(locData)) {
+      response.status(400).send({error: 'Data not valid!'});
     } else {
-      try {
-        const doc = await Merman.findOneAndUpdate(
-          {_id: id},
-          {$set: body},
-          {new: true});
-          if(!doc) {
-            response.status(404).send({error: `ID ${id} cannot be located!`});
-          } else {
-            response.status(200).send({doc});
-          }
-      } catch(error) {
-        response.status(400).send({error: `connect update Mongo DB for ID ${id}`});
-      };
+      console.log('HTTP POST /user Data Received:');
+      console.log(locData);
+      await mysqlDB.insertToTable(locData);
+      response.send({locData});
     }
   });
-
-  app.delete('/srv/del/:my_id', async (request, response) => {
-    const id = request.params.my_id;
-
-    if(!ObjectID.isValid(id)) {
-      response.status(404).send({error: `ID ${id} not valid!`});
-    } else {
-      try {
-        const doc = await Merman.findOneAndRemove({
-          _id: id});
-        if (doc) {
-          response.status(200).send({doc});
-        } else {
-          response.status(404).send({error: `fail to locate ID ${id}`});
-        }
-      } catch (error) {
-        response.status(400).send({
-          error: 'Cannot connect to Mongo DB'
-        });
-      };
-    }
-  });
-*/
 };
