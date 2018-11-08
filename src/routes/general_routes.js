@@ -13,6 +13,11 @@ const sanityCheck = (data) => {
 };
 
 module.exports = (app) => {
+
+  app.get('/', (request, response) => {
+    response.redirect('/users');
+  });
+
   app.get('/users/:count?/:count2?', async (request, response) => {
     const { count, count2 } = request.params;
     try {
