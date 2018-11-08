@@ -1,13 +1,14 @@
 const mysql = require('mysql');
+const mysqlConfig = require('../config/config');
 
 class mysqlDB {
   constructor() {
     this.con = mysql.createConnection({
-      host: "40.117.119.21",
-      port: "3306",
-      user: "team4",
-      password: "P@ssw0rd",
-      database: "aerohack",
+      host: mysqlConfig.HOST,
+      port: mysqlConfig.PORT,
+      user: mysqlConfig.USER,
+      password: mysqlConfig.PASSWORD,
+      database: mysqlConfig.DATABASE,
     });
   }
 /*
