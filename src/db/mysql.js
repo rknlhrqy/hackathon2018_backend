@@ -31,7 +31,6 @@ class mysqlDB {
           latitude = ${data.latitude},
           longitude = ${data.longitude}
     `;
-    console.log(sql);
     return new Promise((resolve, reject) => {
       this.con.query(sql, (error, result, fields) => {
         if (error) reject(error);
