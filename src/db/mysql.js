@@ -11,35 +11,34 @@ class mysqlDB {
       database: mysqlConfig.DATABASE,
     });
   }
-/*
-  async createTable() {
-    const err = await this.con.connect();
-    if (err) throw err;
-    console.log('Connected!');
-    const sql = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, pointname VARCHAR(255), latitude DECIMAL(8.6), longitude DECIMAL(8.6))";
-    const {error, result} = await this.con.query(sql);
-    if (error) throw error;
-    console.log("Table created");
+
+  createTable() {
+    const sql = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, pointname VARCHAR(255), latitude DECIMAL(8,6), longitude DECIMAL(8,6))";
+    return new Promise((resolve, rejecrt) => {
+      this.con.query(sql, (error) => {
+        if (error) reject(error);
+        resolve();
+      });
+    });
   }
-  */
 
   insertToTable(data) {
     const sql = `INSERT INTO users (pointname, latitude, longitude) VALUES ('${data.pointName}', ${data.latitude}, ${data.longitude})`;
     return new Promise((resolve, reject) => {
       this.con.query(sql, (error, result, fields) => {
         if (error) reject(error);
-        console.log("Add into Table");
+        // console.log("Add into Table");
         resolve(result);
       });
     });
   }
 
-  readTable() {
-    const sql = 'SELECT * FROM users';
+  readTable(table) {
+    const sql = `SELECT * FROM \`${table}\``;
     return new Promise((resolve, reject) => {
       this.con.query(sql, (error, result, fields) =>{
         if (error) reject(error);
-        console.log("Read from Table");
+        // console.log("Read from Table");
         resolve(result);
       });
     });
