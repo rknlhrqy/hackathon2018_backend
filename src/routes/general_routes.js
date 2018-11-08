@@ -13,27 +13,30 @@ const sanityCheck = (data) => {
 };
 
 module.exports = (app) => {
-  app.get('/users', async (request, response) => {
+  app.get('/users/:count?/:count2?', async (request, response) => {
+    const { count, count2 } = request.params;
     try {
-      const data = await mysqlDB.readTable('users');
+      const data = await mysqlDB.readTable('users', count, count2);
       response.send({data});
     } catch(error) {
       response.status(400).send({error: 'Error!'});
     }
   });
 
-  app.get('/accelerations', async (request, response) => {
+  app.get('/accelerations/:count?/:count2?', async (request, response) => {
+    const { count, count2 } = request.params;
     try {
-      const data = await mysqlDB.readTable('acceleration (oct)');
+      const data = await mysqlDB.readTable('acceleration (oct)', count, count2);
       response.send({data});
     } catch(error) {
       response.status(400).send({error: 'Error!'});
     }
   });
 
-  app.get('/acls', async (request, response) => {
+  app.get('/acls/:count?/:count2?', async (request, response) => {
+    const { count, count2 } = request.params;
     try {
-      const data = await mysqlDB.readTable('acl (oct)');
+      const data = await mysqlDB.readTable('acl (oct)', count, count2);
       response.send({data});
     } catch(error) {
       response.status(400).send({error: 'Error!'});

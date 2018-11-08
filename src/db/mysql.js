@@ -39,8 +39,20 @@ class mysqlDB {
     });
   }
 
-  readTable(table) {
-    const sql = `SELECT * FROM \`${table}\``;
+  defineSQLCommand(table, count, count2) {
+    let sql = '';
+    if (!!count && !!count2) {
+      sql = `SELECT * FROM \`${table}\` LIMIT ${count}, ${count2}`;
+    } else if (!!count) {
+      sql = `SELECT * FROM \`${table}\` LIMIT ${count}`;
+    } else {
+      sql = `SELECT * FROM \`${table}\``;
+    }
+    return sql;
+  }
+
+  readTable(table, count, count2) {
+    const sql = this.defineSQLCommand(table, count, count2);
     return new Promise((resolve, reject) => {
       this.con.query(sql, (error, result, fields) =>{
         if (error) reject(error);
@@ -48,7 +60,6 @@ class mysqlDB {
       });
     });
   }
-
 }
 
 const mysqlDBInstance = new mysqlDB();
