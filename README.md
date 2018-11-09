@@ -7,5 +7,6 @@ It has only the back-end, no front-end. And it is using Node.js and express.js t
 # how to run it?
 You need to install node.js.<br>
 You need to go inside the project folder and run "npm install" to install all the needed npm modules.<br>
+You need to create the file config.js in src/config/ folder, based on the file config_default.js.<br>
 You need to run "npm start".<br>
 You need to install and use Postman to send HTTP requests to the address: http://localhost:3000.<br>
